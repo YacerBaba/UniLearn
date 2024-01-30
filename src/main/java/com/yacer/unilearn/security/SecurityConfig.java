@@ -1,6 +1,5 @@
 package com.yacer.unilearn.security;
 
-import com.yacer.unilearn.authentication.UserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,19 +30,16 @@ public class SecurityConfig {
     public SecurityFilterChain getSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(csrfConfigurer -> csrfConfigurer.disable())
-                .formLogin(loginConfigurer -> {
+                .formLogin(loginConfigurer -> { loginConfigurer.disable();
                 })
                 .authorizeHttpRequests(
-                        requestMatcher -> {
-                            requestMatcher
-                                    .requestMatchers("/api/auth/**")
-                                    .permitAll()
-                                    .anyRequest()
-                                    .authenticated();
-                        }
-                ).sessionManagement(sessionManagementConfigurer -> {
-                    sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-                })
+                        requestMatcher -> requestMatcher
+                                .requestMatchers("/api/auth/**")
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated()
+                ).sessionManagement(sessionManagementConfigurer ->
+                        sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();

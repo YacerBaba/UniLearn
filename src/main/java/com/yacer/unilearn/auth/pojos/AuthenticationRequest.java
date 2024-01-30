@@ -1,4 +1,4 @@
-package com.yacer.unilearn.authentication;
+package com.yacer.unilearn.auth.pojos;
 
 import lombok.Data;
 

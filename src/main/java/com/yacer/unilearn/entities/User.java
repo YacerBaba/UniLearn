@@ -28,7 +28,7 @@ public class User implements UserDetails {
     private String firstName;
     private String lastName;
     private LocalDateTime birthday;
-    @Column(name = "email",unique = true)
+    @Column(name = "email", unique = true)
     private String email;
     private String password;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -51,6 +51,8 @@ public class User implements UserDetails {
     private Teacher teacher;
     @OneToOne(mappedBy = "user")
     private Student student;
+    @OneToOne(mappedBy = "user")
+    private RefreshToken refreshToken;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

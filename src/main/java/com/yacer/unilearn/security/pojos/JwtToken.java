@@ -1,10 +1,11 @@
-package com.yacer.unilearn.authentication;
+package com.yacer.unilearn.security.pojos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class AuthenticationResponse {
+public class JwtToken {
     private String accessToken;
+    private String refreshToken;
 }

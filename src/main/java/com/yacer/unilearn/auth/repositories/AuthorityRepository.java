@@ -1,4 +1,4 @@
-package com.yacer.unilearn.authentication;
+package com.yacer.unilearn.auth.repositories;
 
 import com.yacer.unilearn.entities.Authority;
 import org.springframework.data.jpa.repository.JpaRepository;
