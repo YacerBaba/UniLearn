@@ -96,6 +96,7 @@ public class JwtService {
     }
 
     public JwtToken generateJwtToken(UserDetails userDetails) {
-        return new JwtToken(generateAccessToken(userDetails), generateRefreshToken(userDetails));
+        var role = userDetails.getAuthorities().stream().toList().get(0).getAuthority();
+        return new JwtToken(generateAccessToken(userDetails), generateRefreshToken(userDetails), role);
     }
 }

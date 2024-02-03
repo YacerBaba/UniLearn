@@ -13,6 +13,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -30,7 +32,8 @@ public class SecurityConfig {
     public SecurityFilterChain getSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(csrfConfigurer -> csrfConfigurer.disable())
-                .formLogin(loginConfigurer -> { loginConfigurer.disable();
+                .formLogin(loginConfigurer -> {
+                    loginConfigurer.disable();
                 })
                 .authorizeHttpRequests(
                         requestMatcher -> requestMatcher
@@ -48,7 +51,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        // AuthenticationProvider class in Spring Security is responsible for authenticating a user.
+        // AuthenticationProvider class is responsible for authenticating a user.
         // The authenticate method performs the actual authentication based on the provided credentials.
         // The supports method indicates which authentication classes are supported by this provider.
         // The DaoAuthenticationProvider is designed to work with a user details service
@@ -66,5 +69,19 @@ public class SecurityConfig {
         // Each AuthenticationProvider is responsible for a specific type of authentication, such as database authentication, LDAP authentication, or custom authentication logic.
         // The AuthenticationManager iterates through its list of providers, asking each one to authenticate the user.
         return configuration.getAuthenticationManager();
+    }
+
+    // Enable CORS for all endpoints
+    @Bean
+    public WebMvcConfigurer webMvcConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**") // specify where to apply this configuration
+                        .allowedOrigins("*")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedHeaders("*");
+            }
+        };
     }
 }
