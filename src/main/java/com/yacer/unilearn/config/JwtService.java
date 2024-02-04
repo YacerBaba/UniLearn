@@ -1,10 +1,10 @@
-package com.yacer.unilearn.security;
+package com.yacer.unilearn.config;
 
 
 import com.yacer.unilearn.auth.repositories.RefreshTokenRepository;
 import com.yacer.unilearn.auth.repositories.UserRepository;
 import com.yacer.unilearn.entities.RefreshToken;
-import com.yacer.unilearn.security.pojos.JwtToken;
+import com.yacer.unilearn.config.pojos.JwtToken;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 import static com.yacer.unilearn.utils.ApplicationUtils.appLogger;
 

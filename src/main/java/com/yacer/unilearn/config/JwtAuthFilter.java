@@ -1,4 +1,4 @@
-package com.yacer.unilearn.security;
+package com.yacer.unilearn.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

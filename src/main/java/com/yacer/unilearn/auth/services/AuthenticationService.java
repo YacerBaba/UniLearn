@@ -5,10 +5,10 @@ import com.yacer.unilearn.auth.pojos.RegistrationRequest;
 import com.yacer.unilearn.auth.repositories.AuthorityRepository;
 import com.yacer.unilearn.auth.repositories.UserRepository;
 import com.yacer.unilearn.entities.User;
-import com.yacer.unilearn.security.JwtService;
-import com.yacer.unilearn.security.pojos.AccessToken;
-import com.yacer.unilearn.security.pojos.JwtToken;
-import com.yacer.unilearn.security.pojos.RefreshTokenDTO;
+import com.yacer.unilearn.config.JwtService;
+import com.yacer.unilearn.config.pojos.AccessToken;
+import com.yacer.unilearn.config.pojos.JwtToken;
+import com.yacer.unilearn.config.pojos.RefreshTokenDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -46,7 +46,7 @@ public class AuthenticationService {
     }
 
     public JwtToken registerUser(RegistrationRequest request) {
-        var authority = authorityRepository.findByAuthorityEquals("ROLE_STUDENT").get();
+        var authority = authorityRepository.findByAuthorityEquals("STUDENT").get();
         var authorities = List.of(authority);
         var user = User.builder()
                 .firstName(request.getFirstName())

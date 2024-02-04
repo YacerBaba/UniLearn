@@ -1,4 +1,4 @@
-package com.yacer.unilearn.security.pojos;
+package com.yacer.unilearn.config.pojos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

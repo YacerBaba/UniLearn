@@ -1,4 +1,4 @@
-package com.yacer.unilearn.security;
+package com.yacer.unilearn.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -13,8 +13,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -37,7 +35,7 @@ public class SecurityConfig {
                 })
                 .authorizeHttpRequests(
                         requestMatcher -> requestMatcher
-                                .requestMatchers("/api/auth/**")
+                                .requestMatchers("/api/auth/**","/api/docs/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
@@ -71,17 +69,4 @@ public class SecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
-    // Enable CORS for all endpoints
-    @Bean
-    public WebMvcConfigurer webMvcConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**") // specify where to apply this configuration
-                        .allowedOrigins("*")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*");
-            }
-        };
-    }
 }

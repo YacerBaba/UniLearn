@@ -1,4 +1,4 @@
-package com.yacer.unilearn.security;
+package com.yacer.unilearn.config;
 
 import com.yacer.unilearn.auth.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
