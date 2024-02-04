@@ -1,5 +1,7 @@
 package com.yacer.unilearn.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yacer.unilearn.auth.pojos.CustomEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,14 +37,17 @@ public class SecurityConfig {
                 })
                 .authorizeHttpRequests(
                         requestMatcher -> requestMatcher
-                                .requestMatchers("/api/auth/**","/api/docs/**")
+                                .requestMatchers("/api/auth/**", "/api/docs/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
                 ).sessionManagement(sessionManagementConfigurer ->
                         sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(configurer -> {
+                    configurer.authenticationEntryPoint(new CustomEntryPoint(new ObjectMapper()));
+                });
         return httpSecurity.build();
     }
 

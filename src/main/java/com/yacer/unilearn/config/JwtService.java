@@ -6,7 +6,9 @@ import com.yacer.unilearn.auth.repositories.UserRepository;
 import com.yacer.unilearn.entities.RefreshToken;
 import com.yacer.unilearn.config.pojos.JwtToken;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +27,7 @@ import static com.yacer.unilearn.utils.ApplicationUtils.appLogger;
 public class JwtService {
     @Value("${security.jwt.encryption.key}")
     private String ENCRYPTION_KEY;
-    private static final long accessTokenDuration = 1000 * 60 * 60 * 2;
+    private static final long accessTokenDuration = 1000 * 60 * 60 * 60 * 3;
     private static final long refreshTokenDuration = 1000 * 60 * 60 * 24 * 15;
     private static final long oneHourDuration = 1000 * 60 * 60;
     private final UserRepository userRepository;
@@ -33,27 +35,37 @@ public class JwtService {
 
     public String getEmail(String token) {
         Claims claims = parseToken(token);
-        return claims.getSubject();
+        if (claims != null)
+            return claims.getSubject();
+        return null;
     }
 
     public Claims parseToken(String token) {
         // This method creates a JWT parser and get the claims from the token
-        return Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(token).getBody();
+        try {
+            return Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(token).getBody();
+        } catch (ExpiredJwtException e) {
+            return null;
+        } catch (MalformedJwtException exception) {
+            return null;
+        }
     }
 
     public boolean isAccessTokenValid(String token) {
         Claims claims = parseToken(token);
-        Date expiresAt = claims.getExpiration();
-        var currentDate = new Date(System.currentTimeMillis() + 1000 * 60 * 60);
-        return currentDate.before(expiresAt);
+        if (claims != null) {
+            Date expiresAt = claims.getExpiration();
+            var currentDate = new Date(System.currentTimeMillis() + 1000 * 60 * 60);
+            return currentDate.before(expiresAt);
+        }
+        return false;
     }
 
     public boolean isRefreshTokenValid(String refreshToken) {
-        var user = userRepository.findUserByRefreshToken(refreshToken).orElseThrow(() -> {
-            appLogger.info("There is no user with this refresh token " + refreshToken);
-            return new RuntimeException("There is no user with this refresh token " + refreshToken);
-        });
-        return user.getRefreshToken().getExpiresAt().after(new Date(System.currentTimeMillis() + oneHourDuration));
+        var user = userRepository.findUserByRefreshToken(refreshToken).orElse(null);
+        if (user != null)
+            return user.getRefreshToken().getExpiresAt().after(new Date(System.currentTimeMillis() + oneHourDuration));
+        return false;
     }
 
     public Key getSignInKey() {

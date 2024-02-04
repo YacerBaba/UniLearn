@@ -1,15 +1,19 @@
 package com.yacer.unilearn.auth.services;
 
 import com.yacer.unilearn.auth.pojos.AuthenticationRequest;
+import com.yacer.unilearn.auth.pojos.Message;
 import com.yacer.unilearn.auth.pojos.RegistrationRequest;
 import com.yacer.unilearn.auth.repositories.AuthorityRepository;
 import com.yacer.unilearn.auth.repositories.UserRepository;
+import com.yacer.unilearn.config.pojos.Token;
 import com.yacer.unilearn.entities.User;
 import com.yacer.unilearn.config.JwtService;
 import com.yacer.unilearn.config.pojos.AccessToken;
 import com.yacer.unilearn.config.pojos.JwtToken;
 import com.yacer.unilearn.config.pojos.RefreshTokenDTO;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -82,5 +86,14 @@ public class AuthenticationService {
                     appLogger.info("This Username has not a refresh token");
                     return new UsernameNotFoundException("This Username has not a refresh token");
                 });
+    }
+
+    public Message validateToken(String token) {
+        if (jwtService.isAccessTokenValid(token)) {
+            return new Message(HttpStatus.OK, "Token is valid");
+        } else if (jwtService.isRefreshTokenValid(token)) {
+            return new Message(HttpStatus.OK, "Token is valid");
+        } else
+            return new Message(HttpStatus.UNAUTHORIZED, "Token is invalid or expired");
     }
 }

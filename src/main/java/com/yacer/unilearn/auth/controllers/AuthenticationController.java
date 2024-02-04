@@ -1,13 +1,18 @@
 package com.yacer.unilearn.auth.controllers;
 
 import com.yacer.unilearn.auth.pojos.AuthenticationRequest;
+import com.yacer.unilearn.auth.pojos.Message;
 import com.yacer.unilearn.auth.pojos.RegistrationRequest;
 import com.yacer.unilearn.auth.services.AuthenticationService;
 import com.yacer.unilearn.config.pojos.AccessToken;
 import com.yacer.unilearn.config.pojos.JwtToken;
 import com.yacer.unilearn.config.pojos.RefreshTokenDTO;
+import com.yacer.unilearn.config.pojos.Token;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.models.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,5 +40,13 @@ public class AuthenticationController {
         return ResponseEntity.ok(authService.generateAccessTokenFromRefreshToken(refreshTokenDTO));
     }
 
-
+    @PostMapping("verify/")
+    @Operation(
+            description = "This method takes a token and validate it , 200 fot valid and 401 for invalid",
+            responses = {}
+    )
+    public ResponseEntity<Message> verifyToken(@RequestBody Token token) {
+        var message = authService.validateToken(token.getToken());
+        return ResponseEntity.status(message.getStatus()).body(message);
+    }
 }
