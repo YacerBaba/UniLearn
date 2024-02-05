@@ -3,14 +3,13 @@ package com.yacer.unilearn.auth.services;
 import com.yacer.unilearn.auth.pojos.AuthenticationRequest;
 import com.yacer.unilearn.auth.pojos.Message;
 import com.yacer.unilearn.auth.pojos.RegistrationRequest;
-import com.yacer.unilearn.auth.repositories.AuthorityRepository;
 import com.yacer.unilearn.auth.repositories.UserRepository;
 import com.yacer.unilearn.entities.User;
 import com.yacer.unilearn.config.JwtService;
 import com.yacer.unilearn.config.pojos.AccessToken;
 import com.yacer.unilearn.config.pojos.JwtToken;
 import com.yacer.unilearn.config.pojos.RefreshTokenDTO;
-import com.yacer.unilearn.student.RoleRepository;
+import com.yacer.unilearn.student.repositories.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static com.yacer.unilearn.utils.ApplicationUtils.appLogger;
 
@@ -58,7 +56,7 @@ public class UserService {
     public User createUser(String firstName, String lastName, String email,
                            String password, LocalDate birthday, String role) {
         var _role = roleRepository.findRoleByName(role)
-                .orElseThrow(() -> new RuntimeException("Role "+ role + " not found"));
+                .orElseThrow(() -> new RuntimeException("Role "+ role + " doesn't exist"));
         var user = User.builder()
                 .firstName(firstName)
                 .lastName(lastName)
@@ -69,7 +67,7 @@ public class UserService {
                 .credentialsNonExpired(true)
                 .accountNonLocked(true)
                 .role(_role)
-                .birthday(LocalDateTime.now()).dateJoined(LocalDateTime.now()).build();
+                .birthday(LocalDate.now()).dateJoined(LocalDateTime.now()).build();
         userRepository.save(user);
         return user;
     }

@@ -9,6 +9,7 @@ import com.yacer.unilearn.config.pojos.JwtToken;
 import com.yacer.unilearn.config.pojos.RefreshTokenDTO;
 import com.yacer.unilearn.config.pojos.Token;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,9 @@ import static com.yacer.unilearn.utils.ApplicationUtils.appLogger;
 @RestController
 @RequestMapping("/api/auth/")
 @RequiredArgsConstructor
+@Tag(
+        name = "Authentication routes"
+)
 public class AuthenticationController {
     private final UserService authService;
 

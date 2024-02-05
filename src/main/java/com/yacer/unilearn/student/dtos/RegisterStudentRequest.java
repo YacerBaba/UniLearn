@@ -1,4 +1,4 @@
-package com.yacer.unilearn.student;
+package com.yacer.unilearn.student.dtos;
 
 import lombok.Data;
 

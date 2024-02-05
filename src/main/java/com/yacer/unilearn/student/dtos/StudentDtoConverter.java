@@ -1,4 +1,4 @@
-package com.yacer.unilearn.student;
+package com.yacer.unilearn.student.dtos;
 
 import com.yacer.unilearn.entities.Student;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,8 @@ public class StudentDtoConverter {
                         student.getCurrentEnrollment().getEnrollmentId(),
                         student.getCurrentEnrollment().getAcademicYear().getStart_date(),
                         student.getCurrentEnrollment().getAcademicYear().getEnd_date(),
-                        student.getCurrentEnrollment().getLevel().getName()
+                        student.getCurrentEnrollment().getLevel().getName(),
+                        student.getCurrentEnrollment().getLevel().getSpeciality().getName()
                 )
         );
     }

@@ -1,4 +1,4 @@
-package com.yacer.unilearn.student;
+package com.yacer.unilearn.student.dtos;
 
 
 import lombok.AllArgsConstructor;
@@ -14,4 +14,5 @@ public class EnrollmentDTO {
     private LocalDate start_date;
     private LocalDate end_date;
     private String level;
+    private String speciality;
 }

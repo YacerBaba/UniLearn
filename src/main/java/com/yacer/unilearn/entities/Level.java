@@ -21,6 +21,11 @@ public class Level {
     private Integer id;
     @Column(unique = true)
     private String name;
+    @ManyToOne
+    @JoinColumn(
+            name = "specialities"
+    )
+    private Speciality speciality;
     @OneToMany(mappedBy = "level")
     private List<Semester> semesters;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

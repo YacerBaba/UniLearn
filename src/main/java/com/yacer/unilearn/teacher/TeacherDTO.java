@@ -1,18 +1,20 @@
-package com.yacer.unilearn.student;
+package com.yacer.unilearn.teacher;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class StudentDTO {
+public class TeacherDTO {
     private Integer id;
     private String first_name;
     private String last_name;
     private String email;
     private String img_url;
-    private LocalDateTime birthday;
-    private EnrollmentDTO current_enrollment;
+    private LocalDate birthday;
+    private String degree;
+    private List<TeachesDTO> teaches;
 }

@@ -47,10 +47,9 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/students/profile/{id}").hasAuthority("view_student")
                                 .requestMatchers(HttpMethod.POST, "/api/students/").hasAuthority("add_student")
                                 .requestMatchers(HttpMethod.PUT, "/api/students/").hasAuthority("update_student")
-                                .requestMatchers(HttpMethod.DELETE, "/api/students/").hasAuthority("delete_student")
-
+                                .requestMatchers(HttpMethod.DELETE, "/api/students/{id}").hasAuthority("delete_student")
                                 .anyRequest()
-                                .permitAll()
+                                .denyAll()
                 ).sessionManagement(sessionManagementConfigurer ->
                         sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())

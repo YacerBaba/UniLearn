@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
+    @Query("select u from User u where u.email = :email and u.accountNonLocked = true")
     Optional<User> findUserByEmail(String email);
 
     @Query("select u from User u where u.refreshToken.token = :token")

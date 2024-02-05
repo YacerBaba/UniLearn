@@ -1,28 +1,66 @@
 package com.yacer.unilearn.teacher;
+
+import com.yacer.unilearn.auth.services.UserService;
 import com.yacer.unilearn.entities.Teacher;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import com.yacer.unilearn.entities.User;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TeacherService {
     private final TeacherRepository teacherRepository;
+    private final TeacherDtoConverter converter;
+    private final UserService userService;
 
-    public TeacherService(TeacherRepository teacherRepository) {
-        this.teacherRepository = teacherRepository;
+    public List<TeacherDTO> getAllTeachers() {
+        var teachers = teacherRepository.findAll();
+        return converter.convertTeachersToDTOsList(teachers);
     }
 
-
-    public List<Teacher> findAll(int page_number) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "id");
-        Pageable pageable = PageRequest.of(page_number, 10, sort);
-        return teacherRepository.findAll(pageable).getContent();
+    public TeacherDTO getTeacherProfile(int id) {
+        var teacher = teacherRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Not such teacher with id :" + id));
+        return converter.convertTeacherToDTO(teacher);
     }
 
-    public Teacher findByUserId(int user_id) {
-        return teacherRepository.findByUserId(user_id);
+    @Transactional
+    public void updateTeacher(UpdateTeacherRequest request) {
+        var teacher = teacherRepository.findById(request.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Not such teacher with id :" + request.getId()));
+        teacher.getUser().setFirstName(request.getFirstName());
+        teacher.getUser().setLastName(request.getLastName());
+        teacher.getUser().setEmail(request.getEmail());
+        teacher.getUser().setBirthday(request.getBirthday());
+        teacher.setDegree(request.getDegree());
+        teacher.setUpdated_at(LocalDateTime.now());
+        teacherRepository.save(teacher);
     }
+
+    @Transactional
+    public void addTeacher(RegisterTeacherRequest request) {
+        var user = userService.createUser(request.getFirstName(), request.getLastName(),
+                request.getEmail(), request.getPassword(), request.getBirthday(), "TEACHER");
+        var teacher = Teacher.builder()
+                .user(user)
+                .degree(request.getDegree())
+                .created_at(LocalDateTime.now())
+                .updated_at(LocalDateTime.now())
+                .build();
+        teacherRepository.save(teacher);
+    }
+
+    public void deleteTeacher(Integer id) {
+        var teacher = teacherRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Not such teacher with id :" + id));
+        teacher.getUser().setAccountNonLocked(false);
+        teacher.setUpdated_at(LocalDateTime.now());
+        teacherRepository.save(teacher);
+    }
+
 }

@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -27,7 +28,7 @@ public class User implements UserDetails {
     private Integer id;
     private String firstName;
     private String lastName;
-    private LocalDateTime birthday;
+    private LocalDate birthday;
     private String img_url;
     @Column(name = "email", unique = true)
     private String email;

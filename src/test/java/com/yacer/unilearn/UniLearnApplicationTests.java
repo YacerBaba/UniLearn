@@ -1,7 +1,6 @@
 package com.yacer.unilearn;
 
-import com.yacer.unilearn.student.StudentService;
-import com.yacer.unilearn.utils.ApplicationUtils;
+import com.yacer.unilearn.student.services.StudentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
