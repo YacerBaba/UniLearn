@@ -28,6 +28,7 @@ public class User implements UserDetails {
     private String firstName;
     private String lastName;
     private LocalDateTime birthday;
+    private String img_url;
     @Column(name = "email", unique = true)
     private String email;
     private String password;
@@ -37,26 +38,18 @@ public class User implements UserDetails {
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
     private boolean enabled;
-    @ManyToMany
-    @JoinTable(
-            name = "user_authorities",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_id")}
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(
+            name = "role_id",
+            nullable = false
     )
-    private List<Authority> authorities;
-
-    @OneToOne(mappedBy = "user")
-    private Admin admin;
-    @OneToOne(mappedBy = "user")
-    private Teacher teacher;
-    @OneToOne(mappedBy = "user")
-    private Student student;
+    private Role role;
     @OneToOne(mappedBy = "user")
     private RefreshToken refreshToken;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return role.getAuthorities();
     }
 
     @Override

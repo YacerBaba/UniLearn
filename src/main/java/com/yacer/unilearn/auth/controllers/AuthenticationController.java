@@ -3,16 +3,13 @@ package com.yacer.unilearn.auth.controllers;
 import com.yacer.unilearn.auth.pojos.AuthenticationRequest;
 import com.yacer.unilearn.auth.pojos.Message;
 import com.yacer.unilearn.auth.pojos.RegistrationRequest;
-import com.yacer.unilearn.auth.services.AuthenticationService;
+import com.yacer.unilearn.auth.services.UserService;
 import com.yacer.unilearn.config.pojos.AccessToken;
 import com.yacer.unilearn.config.pojos.JwtToken;
 import com.yacer.unilearn.config.pojos.RefreshTokenDTO;
 import com.yacer.unilearn.config.pojos.Token;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.models.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +19,7 @@ import static com.yacer.unilearn.utils.ApplicationUtils.appLogger;
 @RequestMapping("/api/auth/")
 @RequiredArgsConstructor
 public class AuthenticationController {
-    private final AuthenticationService authService;
+    private final UserService authService;
 
     @PostMapping("login/")
     public ResponseEntity<JwtToken> authenticate(@RequestBody AuthenticationRequest authRequest) {

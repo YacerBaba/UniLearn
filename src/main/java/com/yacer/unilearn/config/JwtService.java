@@ -5,6 +5,7 @@ import com.yacer.unilearn.auth.repositories.RefreshTokenRepository;
 import com.yacer.unilearn.auth.repositories.UserRepository;
 import com.yacer.unilearn.entities.RefreshToken;
 import com.yacer.unilearn.config.pojos.JwtToken;
+import com.yacer.unilearn.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -27,9 +28,9 @@ import static com.yacer.unilearn.utils.ApplicationUtils.appLogger;
 public class JwtService {
     @Value("${security.jwt.encryption.key}")
     private String ENCRYPTION_KEY;
-    private static final long accessTokenDuration = 1000 * 60 * 60 * 60 * 3;
-    private static final long refreshTokenDuration = 1000 * 60 * 60 * 24 * 15;
     private static final long oneHourDuration = 1000 * 60 * 60;
+    private static final long accessTokenDuration = oneHourDuration * 3;
+    private static final long refreshTokenDuration = oneHourDuration * 24 * 15;
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
@@ -106,8 +107,8 @@ public class JwtService {
         return refreshToken.getToken();
     }
 
-    public JwtToken generateJwtToken(UserDetails userDetails) {
-        var role = userDetails.getAuthorities().stream().toList().get(0).getAuthority();
-        return new JwtToken(generateAccessToken(userDetails), generateRefreshToken(userDetails), role);
+    public JwtToken generateJwtToken(User user) {
+        var role = user.getRole().getName();
+        return new JwtToken(generateAccessToken(user), generateRefreshToken(user), role);
     }
 }

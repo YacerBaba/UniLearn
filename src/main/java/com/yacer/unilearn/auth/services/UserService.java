@@ -5,13 +5,12 @@ import com.yacer.unilearn.auth.pojos.Message;
 import com.yacer.unilearn.auth.pojos.RegistrationRequest;
 import com.yacer.unilearn.auth.repositories.AuthorityRepository;
 import com.yacer.unilearn.auth.repositories.UserRepository;
-import com.yacer.unilearn.config.pojos.Token;
 import com.yacer.unilearn.entities.User;
 import com.yacer.unilearn.config.JwtService;
 import com.yacer.unilearn.config.pojos.AccessToken;
 import com.yacer.unilearn.config.pojos.JwtToken;
 import com.yacer.unilearn.config.pojos.RefreshTokenDTO;
-import io.jsonwebtoken.Claims;
+import com.yacer.unilearn.student.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,10 +27,10 @@ import static com.yacer.unilearn.utils.ApplicationUtils.appLogger;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService {
+public class UserService {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
-    private final AuthorityRepository authorityRepository;
+    private final RoleRepository roleRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
@@ -50,23 +50,29 @@ public class AuthenticationService {
     }
 
     public JwtToken registerUser(RegistrationRequest request) {
-        var authority = authorityRepository.findByAuthorityEquals("STUDENT").get();
-        var authorities = List.of(authority);
+        var user = createUser(request.getFirstName(), request.getLastName()
+                , request.getEmail(), request.getPassword(), LocalDate.now(), "ADMIN");
+        return jwtService.generateJwtToken(user);
+    }
+
+    public User createUser(String firstName, String lastName, String email,
+                           String password, LocalDate birthday, String role) {
+        var _role = roleRepository.findRoleByName(role)
+                .orElseThrow(() -> new RuntimeException("Role "+ role + " not found"));
         var user = User.builder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .firstName(firstName)
+                .lastName(lastName)
+                .email(email)
+                .password(passwordEncoder.encode(password))
                 .accountNonExpired(true)
                 .enabled(true)
                 .credentialsNonExpired(true)
                 .accountNonLocked(true)
-                .authorities(authorities)
+                .role(_role)
                 .birthday(LocalDateTime.now()).dateJoined(LocalDateTime.now()).build();
         userRepository.save(user);
-        return jwtService.generateJwtToken(user);
+        return user;
     }
-
 
     public AccessToken generateAccessTokenFromRefreshToken(RefreshTokenDTO token) {
         // Verify refresh token expiration date

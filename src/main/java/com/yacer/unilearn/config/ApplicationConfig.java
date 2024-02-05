@@ -2,6 +2,9 @@ package com.yacer.unilearn.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
+import org.springframework.security.access.vote.RoleVoter;
+import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -19,5 +22,17 @@ public class ApplicationConfig {
                         .allowedHeaders("*");
             }
         };
+    }
+
+    @Bean
+    public OpenEntityManagerInViewFilter openEntityManagerInViewFilter() {
+        return new OpenEntityManagerInViewFilter();
+    }
+
+    @Bean
+    public RoleVoter roleVoter() {
+        RoleVoter roleVoter = new RoleVoter();
+        roleVoter.setRolePrefix(""); // Set an empty prefix
+        return roleVoter;
     }
 }

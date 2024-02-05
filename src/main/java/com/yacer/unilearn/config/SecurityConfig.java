@@ -5,10 +5,12 @@ import com.yacer.unilearn.auth.pojos.CustomEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -39,8 +41,16 @@ public class SecurityConfig {
                         requestMatcher -> requestMatcher
                                 .requestMatchers("/api/auth/**", "/api/docs/**")
                                 .permitAll()
+                                // Student controller
+                                .requestMatchers(HttpMethod.GET, "/api/students/").hasAuthority("view_student")
+                                .requestMatchers(HttpMethod.GET, "/api/students/{level}").hasAuthority("view_student")
+                                .requestMatchers(HttpMethod.GET, "/api/students/profile/{id}").hasAuthority("view_student")
+                                .requestMatchers(HttpMethod.POST, "/api/students/").hasAuthority("add_student")
+                                .requestMatchers(HttpMethod.PUT, "/api/students/").hasAuthority("update_student")
+                                .requestMatchers(HttpMethod.DELETE, "/api/students/").hasAuthority("delete_student")
+
                                 .anyRequest()
-                                .authenticated()
+                                .permitAll()
                 ).sessionManagement(sessionManagementConfigurer ->
                         sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
