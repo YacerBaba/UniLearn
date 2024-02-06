@@ -21,15 +21,18 @@ public class Module {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String moduleName;
+    private String bg_color;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime created_at;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime updated_at;
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(
             name = "semester_id"
     )
     private Semester semester;
     @OneToMany(mappedBy = "module")
     private List<ModuleWeek> moduleWeeks;
+    @OneToMany(mappedBy = "module")
+    List<Teaches> teachedByList;
 }

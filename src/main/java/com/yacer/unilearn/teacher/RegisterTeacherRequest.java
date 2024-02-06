@@ -13,4 +13,5 @@ public class RegisterTeacherRequest {
     private String password;
     private LocalDate birthday;
     private Degree degree;
+    private Integer module_id;
 }

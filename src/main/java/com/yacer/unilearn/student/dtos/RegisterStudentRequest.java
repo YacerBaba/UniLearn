@@ -11,5 +11,5 @@ public class RegisterStudentRequest {
     private String email;
     private String password;
     private LocalDate birthday;
-    private String level;
+    private Integer level_id;
 }

@@ -55,6 +55,12 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/api/teachers/").hasAuthority("add_teacher")
                                 .requestMatchers(HttpMethod.PUT, "/api/teachers/").hasAuthority("update_teacher")
                                 .requestMatchers(HttpMethod.DELETE, "/api/teachers/profile/{id}").hasAuthority("delete_teacher")
+                                // Level controller
+                                .requestMatchers(HttpMethod.GET, "/api/levels/").hasAuthority("view_level")
+                                // Department controller
+                                .requestMatchers(HttpMethod.GET, "/api/departments/").hasAuthority("view_department")
+                                // Module controller
+                                .requestMatchers(HttpMethod.GET, "/api/modules/").hasAuthority("view_module")
 
                                 .anyRequest()
                                 .denyAll()

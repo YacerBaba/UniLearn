@@ -20,7 +20,7 @@ public class StudentDtoConverter {
                         student.getCurrentEnrollment().getEnrollmentId(),
                         student.getCurrentEnrollment().getAcademicYear().getStart_date(),
                         student.getCurrentEnrollment().getAcademicYear().getEnd_date(),
-                        student.getCurrentEnrollment().getLevel().getName(),
+                        student.getCurrentEnrollment().getLevel().getName().name(),
                         student.getCurrentEnrollment().getLevel().getSpeciality().getName()
                 )
         );

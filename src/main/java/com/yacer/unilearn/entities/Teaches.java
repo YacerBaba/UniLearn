@@ -3,17 +3,16 @@ package com.yacer.unilearn.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "teacher_module",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"teacher_id", "module_id", "enrollment_year"})
-)
+@Table(name = "teacher_module")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
+@Builder
 public class Teaches {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

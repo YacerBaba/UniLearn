@@ -8,7 +8,7 @@ public class EnrollmentDtoConverter {
         return new EnrollmentDTO(enrollment.getEnrollmentId(),
                 enrollment.getAcademicYear().getStart_date(),
                 enrollment.getAcademicYear().getEnd_date(),
-                enrollment.getLevel().getName(),
+                enrollment.getLevel().getName().name(),
                 enrollment.getLevel().getSpeciality().getName());
     }
 

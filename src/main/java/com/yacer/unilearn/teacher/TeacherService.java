@@ -1,8 +1,12 @@
 package com.yacer.unilearn.teacher;
 
 import com.yacer.unilearn.auth.services.UserService;
+import com.yacer.unilearn.entities.AcademicYear;
 import com.yacer.unilearn.entities.Teacher;
+import com.yacer.unilearn.entities.Teaches;
 import com.yacer.unilearn.entities.User;
+import com.yacer.unilearn.modules.ModuleRepository;
+import com.yacer.unilearn.student.repositories.AcademicYearRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +19,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeacherService {
     private final TeacherRepository teacherRepository;
+    private final TeachingRepository teachingRepository;
+    private final ModuleRepository moduleRepository;
+    private final AcademicYearRepository academicYearRepository;
     private final TeacherDtoConverter converter;
     private final UserService userService;
 
@@ -53,6 +60,16 @@ public class TeacherService {
                 .updated_at(LocalDateTime.now())
                 .build();
         teacherRepository.save(teacher);
+        var module = moduleRepository.findById(request.getModule_id())
+                .orElseThrow(() -> new EntityNotFoundException("Not such module with id :" + request.getModule_id()));
+        var academicYear = academicYearRepository.findById(1)
+                .orElseThrow(() -> new EntityNotFoundException("Not such academic year with id :" + request.getModule_id()));
+        var teaches = Teaches.builder()
+                .teacher(teacher)
+                .module(module)
+                .academicYear(academicYear)
+                .build();
+        teachingRepository.save(teaches);
     }
 
     public void deleteTeacher(Integer id) {

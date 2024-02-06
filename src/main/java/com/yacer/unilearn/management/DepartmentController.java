@@ -1,6 +1,5 @@
-package com.yacer.unilearn.levels;
+package com.yacer.unilearn.management;
 
-import com.yacer.unilearn.enums.LevelEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -14,19 +13,17 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/levels/")
+@RequestMapping("/api/departments/")
 @SecurityRequirement(name = "Jwt Authentication")
-public class LevelController {
+public class DepartmentController {
+    private final DepartmentService departmentService;
 
     @GetMapping("")
     @Operation(
-            summary = "Get All Levels" ,
-            description = "Get All levels , Role ADMIN"
+            summary = "Get Department with its specialities and levels"
     )
-    public ResponseEntity<List<LevelEnum>> getAllLevels() {
-        List<LevelEnum> levels = List.of(
-                LevelEnum.L1, LevelEnum.L2,
-                LevelEnum.L3, LevelEnum.M1, LevelEnum.M2);
-        return ResponseEntity.of(Optional.of(levels));
+    public List<DepartmentDTO> getAllDepartments() {
+        return departmentService.getAllDepartments();
     }
+
 }

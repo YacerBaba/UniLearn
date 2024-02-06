@@ -1,5 +1,6 @@
 package com.yacer.unilearn.entities;
 
+import com.yacer.unilearn.enums.LevelEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +11,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "levels")
+@Table(name = "levels", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"name", "speciality_id"})
+})
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,11 +22,11 @@ public class Level {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(unique = true)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private LevelEnum name;
     @ManyToOne
     @JoinColumn(
-            name = "specialities"
+            name = "speciality_id"
     )
     private Speciality speciality;
     @OneToMany(mappedBy = "level")

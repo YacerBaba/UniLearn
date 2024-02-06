@@ -3,6 +3,7 @@ package com.yacer.unilearn.student.services;
 import com.yacer.unilearn.auth.services.UserService;
 import com.yacer.unilearn.entities.Enrollment;
 import com.yacer.unilearn.entities.Student;
+import com.yacer.unilearn.enums.LevelEnum;
 import com.yacer.unilearn.levels.LevelRepository;
 import com.yacer.unilearn.student.dtos.RegisterStudentRequest;
 import com.yacer.unilearn.student.dtos.StudentDTO;
@@ -17,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -35,10 +35,8 @@ public class StudentService {
         return converter.convertStudentsToDTOsList(students);
     }
 
-    public List<StudentDTO> findStudentsByLevel(String level_name) {
-        var level = levelRepository.findLevelByName(level_name).orElse(null);
-        if (level == null) return Collections.emptyList();
-        var students = studentRepository.findStudentsByCurrentLevel(level);
+    public List<StudentDTO> findStudentsByLevel(LevelEnum level_name) {
+        var students = studentRepository.findStudentsByCurrentLevel(level_name);
         return converter.convertStudentsToDTOsList(students);
     }
 
@@ -52,8 +50,8 @@ public class StudentService {
                 .updated_at(LocalDateTime.now())
                 .build();
         studentRepository.save(student);
-        var level = levelRepository.findLevelByName(request.getLevel())
-                .orElseThrow(() -> new EntityNotFoundException("No such level : " + request.getLevel()));
+        var level = levelRepository.findById(request.getLevel_id())
+                .orElseThrow(() -> new EntityNotFoundException("No such level : " + request.getLevel_id()));
         var currentAcademicYear = yearRepository.findById(1)
                 .orElseThrow(() -> new EntityNotFoundException("No such year with id : 1"));
 

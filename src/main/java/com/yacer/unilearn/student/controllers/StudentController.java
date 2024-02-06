@@ -1,6 +1,7 @@
 package com.yacer.unilearn.student.controllers;
 
 import com.yacer.unilearn.auth.pojos.Message;
+import com.yacer.unilearn.enums.LevelEnum;
 import com.yacer.unilearn.student.dtos.RegisterStudentRequest;
 import com.yacer.unilearn.student.dtos.StudentDTO;
 import com.yacer.unilearn.student.dtos.UpdateStudentRequest;
@@ -35,7 +36,7 @@ public class StudentController {
             summary = "Get students by level",
             description = "Role : ADMIN"
     )
-    public ResponseEntity<List<StudentDTO>> getStudentsByLevel(@PathVariable String level) {
+    public ResponseEntity<List<StudentDTO>> getStudentsByLevel(@PathVariable LevelEnum level) {
         return ResponseEntity.ok(studentService.findStudentsByLevel(level));
     }
 
