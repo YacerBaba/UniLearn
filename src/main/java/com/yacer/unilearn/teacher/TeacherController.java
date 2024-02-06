@@ -2,6 +2,7 @@ package com.yacer.unilearn.teacher;
 
 import com.yacer.unilearn.auth.pojos.Message;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/teachers/")
+@SecurityRequirement(name = "Jwt Authentication")
 @Tag(
         name = "Teacher routes"
 )
@@ -51,7 +53,7 @@ public class TeacherController {
     @DeleteMapping("{id}")
     @Operation(
             summary = "Delete a teacher",
-            description = "Delete an existing teacher based on the provided ID."
+            description = "Delete an existing teacher based on the provided ID. 200 success , otherwise error"
     )
     public ResponseEntity<Message> deleteTeacher(@PathVariable Integer id) {
         teacherService.deleteTeacher(id);

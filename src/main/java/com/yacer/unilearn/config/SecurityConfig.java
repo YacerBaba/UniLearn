@@ -42,12 +42,20 @@ public class SecurityConfig {
                                 .requestMatchers("/api/auth/**", "/api/docs/**")
                                 .permitAll()
                                 // Student controller
-                                .requestMatchers(HttpMethod.GET, "/api/students/").hasAuthority("view_student")
-                                .requestMatchers(HttpMethod.GET, "/api/students/{level}").hasAuthority("view_student")
-                                .requestMatchers(HttpMethod.GET, "/api/students/profile/{id}").hasAuthority("view_student")
+                                .requestMatchers(HttpMethod.GET,
+                                        "/api/students/",
+                                        "/api/students/{level}",
+                                        "/api/students/profile/{id}").hasAuthority("view_student")
                                 .requestMatchers(HttpMethod.POST, "/api/students/").hasAuthority("add_student")
                                 .requestMatchers(HttpMethod.PUT, "/api/students/").hasAuthority("update_student")
                                 .requestMatchers(HttpMethod.DELETE, "/api/students/{id}").hasAuthority("delete_student")
+                                // Teacher controller
+                                .requestMatchers(HttpMethod.GET,
+                                        "/api/teachers/", "/api/teachers/profile/{id}").hasAuthority("view_teacher")
+                                .requestMatchers(HttpMethod.POST, "/api/teachers/").hasAuthority("add_teacher")
+                                .requestMatchers(HttpMethod.PUT, "/api/teachers/").hasAuthority("update_teacher")
+                                .requestMatchers(HttpMethod.DELETE, "/api/teachers/profile/{id}").hasAuthority("delete_teacher")
+
                                 .anyRequest()
                                 .denyAll()
                 ).sessionManagement(sessionManagementConfigurer ->
