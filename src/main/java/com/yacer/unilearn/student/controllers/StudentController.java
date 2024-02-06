@@ -1,7 +1,9 @@
 package com.yacer.unilearn.student.controllers;
 
 import com.yacer.unilearn.auth.pojos.Message;
+import com.yacer.unilearn.entities.User;
 import com.yacer.unilearn.enums.LevelEnum;
+import com.yacer.unilearn.semesters.SemesterDTO;
 import com.yacer.unilearn.student.dtos.RegisterStudentRequest;
 import com.yacer.unilearn.student.dtos.StudentDTO;
 import com.yacer.unilearn.student.dtos.UpdateStudentRequest;
@@ -54,12 +56,26 @@ public class StudentController {
 
     @GetMapping("profile/{id}")
     @Operation(
-            summary = "Get Student Profile",
-            description = "Roles : ADMIN , STUDENT"
+            summary = "Get Student Profile 'for Admin'",
+            description = "Roles : ADMIN"
     )
     public ResponseEntity<StudentDTO> getStudentById(@PathVariable Integer id) {
         return ResponseEntity.ok(studentService.getStudentById(id));
     }
+
+    @GetMapping("details/")
+    @Operation(
+            summary = "Get Student Profile 'for Student'",
+            description = "Roles: STUDENT"
+    )
+    public ResponseEntity<StudentDTO> getStudentProfile(Authentication authentication) {
+        var user = authentication.getPrincipal();
+        if (user instanceof User) {
+            return ResponseEntity.ok(studentService.getStudentByEmail(((User) user).getEmail()));
+        }
+        throw new IllegalStateException("Invalid User");
+    }
+
 
     @PostMapping
     @Operation(
@@ -92,4 +108,16 @@ public class StudentController {
         return ResponseEntity.ok(new Message(HttpStatus.OK, "Deleted successfully"));
     }
 
+    @GetMapping("enrollment/")
+    @Operation(
+            summary = "Get student current enrollment semesters and modules",
+            description = "Roles : ADMIN"
+    )
+    public ResponseEntity<List<SemesterDTO>> getCurrentEnrollmentSemesters(Authentication authentication) {
+        var user = authentication.getPrincipal();
+        if (user instanceof User) {
+            return ResponseEntity.ok(studentService.getCurrentEnrollmentSemestersByUserEmail(((User) user).getEmail()));
+        }
+        throw new IllegalStateException();
+    }
 }

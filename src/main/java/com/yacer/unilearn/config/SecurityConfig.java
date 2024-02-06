@@ -45,13 +45,16 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET,
                                         "/api/students/",
                                         "/api/students/{level}",
-                                        "/api/students/profile/{id}").hasAuthority("view_student")
+                                        "/api/students/profile/{id}",
+                                        "/api/students/details/").hasAuthority("view_student")
                                 .requestMatchers(HttpMethod.POST, "/api/students/").hasAuthority("add_student")
                                 .requestMatchers(HttpMethod.PUT, "/api/students/").hasAuthority("update_student")
                                 .requestMatchers(HttpMethod.DELETE, "/api/students/{id}").hasAuthority("delete_student")
+                                .requestMatchers(HttpMethod.GET, "/api/students/enrollment/").hasAuthority("view_module")
                                 // Teacher controller
                                 .requestMatchers(HttpMethod.GET,
-                                        "/api/teachers/", "/api/teachers/profile/{id}").hasAuthority("view_teacher")
+                                        "/api/teachers/",
+                                        "/api/teachers/profile/{id}").hasAuthority("view_teacher")
                                 .requestMatchers(HttpMethod.POST, "/api/teachers/").hasAuthority("add_teacher")
                                 .requestMatchers(HttpMethod.PUT, "/api/teachers/").hasAuthority("update_teacher")
                                 .requestMatchers(HttpMethod.DELETE, "/api/teachers/profile/{id}").hasAuthority("delete_teacher")
@@ -61,7 +64,6 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/departments/").hasAuthority("view_department")
                                 // Module controller
                                 .requestMatchers(HttpMethod.GET, "/api/modules/").hasAuthority("view_module")
-
                                 .anyRequest()
                                 .denyAll()
                 ).sessionManagement(sessionManagementConfigurer ->

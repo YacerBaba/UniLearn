@@ -14,7 +14,8 @@ public class ModuleDtoConverter {
     public ModuleDTO convertToDTO(Module module) {
         return new ModuleDTO(
                 module.getId(),
-                module.getModuleName() + " - " + module.getSemester().getLevel().getSpeciality().getName(),
+                module.getModuleName() + " - " + module.getSemester().getLevel().getName().name()
+                        + " " + module.getSemester().getLevel().getSpeciality().getName(),
                 module.getBg_color()
         );
     }

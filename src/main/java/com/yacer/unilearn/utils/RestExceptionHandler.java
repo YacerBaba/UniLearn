@@ -25,4 +25,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         var message = new Message(HttpStatus.CONFLICT, ex.getMessage());
         return ResponseEntity.status(message.getStatus()).body(message);
     }
+
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<Message> handleIllegalStateException(IllegalStateException ex) {
+        var message = new Message(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        return ResponseEntity.status(message.getStatus()).body(message);
+    }
 }

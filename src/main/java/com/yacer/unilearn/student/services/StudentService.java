@@ -5,6 +5,8 @@ import com.yacer.unilearn.entities.Enrollment;
 import com.yacer.unilearn.entities.Student;
 import com.yacer.unilearn.enums.LevelEnum;
 import com.yacer.unilearn.levels.LevelRepository;
+import com.yacer.unilearn.semesters.SemesterDTO;
+import com.yacer.unilearn.semesters.SemesterDtoConverter;
 import com.yacer.unilearn.student.dtos.RegisterStudentRequest;
 import com.yacer.unilearn.student.dtos.StudentDTO;
 import com.yacer.unilearn.student.dtos.StudentDtoConverter;
@@ -29,6 +31,7 @@ public class StudentService {
     private final AcademicYearRepository yearRepository;
     private final UserService userService;
     private final StudentDtoConverter converter;
+    private final SemesterDtoConverter semesterConverter;
 
     public List<StudentDTO> getAllStudents() {
         var students = studentRepository.findAll();
@@ -93,5 +96,19 @@ public class StudentService {
                 .orElseThrow(() -> new EntityNotFoundException("No such student with id : " + id));
         student.getUser().setAccountNonLocked(false);
         studentRepository.save(student);
+    }
+
+
+    public List<SemesterDTO> getCurrentEnrollmentSemestersByUserEmail(String email) {
+        var student = studentRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("No such student with email : " + email));
+        return semesterConverter
+                .convertSemestersToDTOsList(student.getCurrentEnrollment().getLevel().getSemesters());
+    }
+
+    public StudentDTO getStudentByEmail(String email) {
+        var student = studentRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("No such student with email : " + email));
+        return converter.convertStudentToDTO(student);
     }
 }
