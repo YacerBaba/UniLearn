@@ -54,7 +54,7 @@ public class SecurityConfig {
                                 // Teacher controller
                                 .requestMatchers(HttpMethod.GET,
                                         "/api/teachers/",
-                                        "/api/teachers/profile/{id}").hasAuthority("view_teacher")
+                                        "/api/teachers/profile/{id}", "/api/teachers/details/").hasAuthority("view_teacher")
                                 .requestMatchers(HttpMethod.POST, "/api/teachers/").hasAuthority("add_teacher")
                                 .requestMatchers(HttpMethod.PUT, "/api/teachers/").hasAuthority("update_teacher")
                                 .requestMatchers(HttpMethod.DELETE, "/api/teachers/profile/{id}").hasAuthority("delete_teacher")

@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "module_weeks")
 @Data
@@ -26,4 +28,6 @@ public class ModuleWeek {
             name = "week_id"
     )
     private Week week;
+    @OneToMany(mappedBy = "moduleWeek")
+    private List<Content> contents;
 }

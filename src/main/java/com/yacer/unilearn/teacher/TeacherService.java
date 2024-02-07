@@ -1,10 +1,8 @@
 package com.yacer.unilearn.teacher;
 
 import com.yacer.unilearn.auth.services.UserService;
-import com.yacer.unilearn.entities.AcademicYear;
 import com.yacer.unilearn.entities.Teacher;
 import com.yacer.unilearn.entities.Teaches;
-import com.yacer.unilearn.entities.User;
 import com.yacer.unilearn.modules.ModuleRepository;
 import com.yacer.unilearn.student.repositories.AcademicYearRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -80,4 +78,9 @@ public class TeacherService {
         teacherRepository.save(teacher);
     }
 
+    public TeacherDTO getTeacherByEmail(String email) {
+        var teacher = teacherRepository.findTeacherByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Not such teacher with id :" + email));
+        return converter.convertTeacherToDTO(teacher);
+    }
 }
