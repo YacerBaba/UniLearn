@@ -84,7 +84,7 @@ public class StudentService {
         student.getUser().setLastName(request.getLastName());
         student.getUser().setEmail(request.getEmail());
         student.getUser().setBirthday(request.getBirthday());
-        var level = levelRepository.findLevelByName(request.getLevel())
+        var level = levelRepository.findById(request.getLevel_id())
                 .orElseThrow(() -> new EntityNotFoundException("No such level with id : " + request.getId()));
         student.getCurrentEnrollment().setLevel(level);
         studentRepository.save(student);

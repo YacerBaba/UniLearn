@@ -11,5 +11,5 @@ public class UpdateStudentRequest {
     private String lastName;
     private String email;
     private LocalDate birthday;
-    private String level;
+    private Integer level_id;
 }

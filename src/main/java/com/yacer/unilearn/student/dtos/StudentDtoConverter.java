@@ -1,14 +1,19 @@
 package com.yacer.unilearn.student.dtos;
 
 import com.yacer.unilearn.entities.Student;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class StudentDtoConverter {
+    private final EnrollmentDtoConverter converter;
+
     public StudentDTO convertStudentToDTO(Student student) {
+        var enrollmentDto = converter.convertToDTO(student.getCurrentEnrollment());
         return new StudentDTO(
                 student.getId(),
                 student.getUser().getFirstName(),
@@ -16,13 +21,7 @@ public class StudentDtoConverter {
                 student.getUser().getEmail(),
                 student.getUser().getImg_url(),
                 student.getUser().getBirthday(),
-                new EnrollmentDTO(
-                        student.getCurrentEnrollment().getEnrollmentId(),
-                        student.getCurrentEnrollment().getAcademicYear().getStart_date(),
-                        student.getCurrentEnrollment().getAcademicYear().getEnd_date(),
-                        student.getCurrentEnrollment().getLevel().getName().name(),
-                        student.getCurrentEnrollment().getLevel().getSpeciality().getName()
-                )
+                enrollmentDto
         );
     }
 
